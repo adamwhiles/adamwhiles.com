@@ -1,17 +1,11 @@
 {
-  "routes": [
-    {
-      "route": "/blog/*",
-      "rewrite": "/blog/*"
-    }
-  ],
   "navigationFallback": {
-    "rewrite": "/404",
-    "exclude": ["/assets/*", "/*.css", "/*.js", "/*.svg", "/*.png", "/*.ico"]
+    "rewrite": "/404.html",
+    "exclude": ["/_astro/*", "/*.css", "/*.js", "/*.svg", "/*.png", "/*.ico"]
   },
   "responseOverrides": {
     "404": {
-      "rewrite": "/404"
+      "rewrite": "/404.html"
     }
   },
   "globalHeaders": {
