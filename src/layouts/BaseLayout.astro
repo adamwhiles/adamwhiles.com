@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Adam Whiles — cloud architect, game dev, builder." } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{title}</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header class="sticky top-0 z-50 border-b" style="background-color: var(--color-bg); border-color: var(--color-border);">
+      <nav class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+        <a href="/" class="font-mono text-sm font-semibold" style="color: var(--color-accent);">
+          adam whiles<span class="cursor-blink"></span>
+        </a>
+        <ul class="flex items-center gap-6 text-sm font-mono">
+          <li>
+            <a href="/projects" class="nav-link" style="color: var(--color-muted);">projects</a>
+          </li>
+          <li>
+            <a href="/blog" class="nav-link" style="color: var(--color-muted);">blog</a>
+          </li>
+          <li>
+            <a href="/about" class="nav-link" style="color: var(--color-muted);">about</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="border-t mt-24 py-8" style="border-color: var(--color-border);">
+      <div class="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span class="font-mono text-xs" style="color: var(--color-muted);">
+          © {new Date().getFullYear()} adam whiles
+        </span>
+        <div class="flex items-center gap-5">
+          <a href="https://github.com/adamwhiles" target="_blank" rel="noopener" class="font-mono text-xs hover:opacity-80" style="color: var(--color-muted);">github</a>
+          <a href="https://www.youtube.com/@credibledev" target="_blank" rel="noopener" class="font-mono text-xs hover:opacity-80" style="color: var(--color-muted);">youtube</a>
+          <a href="https://www.linkedin.com/in/adamwhiles/" target="_blank" rel="noopener" class="font-mono text-xs hover:opacity-80" style="color: var(--color-muted);">linkedin</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .nav-link:hover {
+    color: var(--color-accent) !important;
+    transition: color 0.15s;
+  }
+</style>

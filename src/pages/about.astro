@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About — Adam Whiles" description="Cloud solutions architect, game developer, and builder.">
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-24">
+    <div class="mb-12">
+      <p class="font-mono text-sm mb-3" style="color: var(--color-accent);">> cat about.md</p>
+      <h1 class="font-mono text-3xl font-semibold mb-3" style="color: var(--color-text);">about</h1>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-12">
+      <div class="sm:col-span-2 flex flex-col gap-5">
+        <p class="leading-relaxed" style="color: var(--color-muted);">
+          I'm a cloud solutions architect with a habit of building things outside of work hours. That's led to shipping a game on Steam, running a YouTube channel, building tools for the cloud community, and currently working through Rust.
+        </p>
+        <p class="leading-relaxed" style="color: var(--color-muted);">
+          By day I work on cloud architecture, designing and evaluating different systems and technologies. By night I'm usually in a code editor working on whatever project has my attention, this can change houry... ADHD.
+        </p>
+        <p class="leading-relaxed" style="color: var(--color-muted);">
+          This site is where I write about what I'm learning and building, no SEO fluff, just honest posts about the things I'm actually working through.
+        </p>
+
+        <div class="mt-4">
+          <p class="font-mono text-sm mb-4" style="color: var(--color-accent);">> currently</p>
+          <ul class="flex flex-col gap-2">
+            {[
+              "Working through The Rust Book + building small CLI tools",
+              "Developing Hello Hacker: Project Nightfall",
+              "Cloud architecture (Azure) and Terraform",
+              "Running the credibledev YouTube channel",
+            ].map((item) => (
+              <li class="flex items-start gap-2 text-sm" style="color: var(--color-muted);">
+                <span class="font-mono shrink-0" style="color: var(--color-accent);">›</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Side panel -->
+      <aside class="flex flex-col gap-6">
+        <div class="rounded-lg border p-5" style="background: var(--color-surface); border-color: var(--color-border);">
+          <p class="font-mono text-xs mb-4" style="color: var(--color-accent);">links</p>
+          <ul class="flex flex-col gap-3">
+            {[
+              { label: "credibledev (YouTube)", href: "https://www.youtube.com/@credibledev" },
+              { label: "certranker", href: "https://certranker.com" },
+              { label: "Hello Hacker (Steam)", href: "https://store.steampowered.com/app/4119130/HELLO_HACKER/" },
+              { label: "GitHub", href: "https://github.com/adamwhiles" },
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/adamwhiles/" },
+            ].map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener"
+                  class="font-mono text-xs hover:underline"
+                  style="color: var(--color-muted);"
+                >
+                  {link.label} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rounded-lg border p-5" style="background: var(--color-surface); border-color: var(--color-border);">
+          <p class="font-mono text-xs mb-4" style="color: var(--color-accent);">tech I use</p>
+          <div class="flex flex-wrap gap-2">
+            {["AWS", "Azure", "Terraform", "Rust", "Python", "TypeScript", "Docker", "Kubernetes"].map((tech) => (
+              <span class="font-mono text-xs px-2 py-1 rounded" style="background: var(--color-surface-raised); color: var(--color-muted);">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

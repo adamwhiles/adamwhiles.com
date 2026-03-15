@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const tags = ['all', 'rust', 'cloud', 'gamedev', 'general'] as const;
+
+const tagColors: Record<string, string> = {
+  rust: "#f97316",
+  cloud: "#3b82f6",
+  gamedev: "#a855f7",
+  general: "var(--color-muted)",
+};
+---
+
+<BaseLayout title="Blog — Adam Whiles" description="Writing about Rust, cloud architecture, game dev, and whatever else I'm building.">
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-24">
+    <div class="mb-12">
+      <p class="font-mono text-sm mb-3" style="color: var(--color-accent);">> ls ./blog</p>
+      <h1 class="font-mono text-3xl font-semibold mb-3" style="color: var(--color-text);">blog</h1>
+      <p class="text-sm" style="color: var(--color-muted);">
+        Writing about Rust, cloud architecture, game dev, and whatever else I'm building.
+      </p>
+    </div>
+
+    <!-- Tag filter -->
+    <div class="flex flex-wrap gap-2 mb-10" id="tag-filters">
+      {tags.map((tag) => (
+        <button
+          data-tag={tag}
+          class="tag-btn font-mono text-xs px-3 py-1.5 rounded border transition-all duration-150 cursor-pointer"
+          style={`border-color: var(--color-border); color: var(--color-muted);`}
+        >
+          {tag === 'all' ? '# all' : `[${tag}]`}
+        </button>
+      ))}
+    </div>
+
+    <!-- Posts -->
+    <div class="flex flex-col gap-3" id="posts-list">
+      {allPosts.map((post) => (
+        <a
+          href={`/blog/${post.id}`}
+          data-tags={post.data.tags.join(',')}
+          class="post-item group flex flex-col sm:flex-row sm:items-start gap-3 rounded-lg border p-5 transition-colors duration-150"
+          style="background: var(--color-surface); border-color: var(--color-border);"
+        >
+          <div class="flex flex-col gap-2 flex-1 min-w-0">
+            <div class="flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => (
+                <span
+                  class="font-mono text-xs"
+                  style={`color: ${tagColors[tag] ?? 'var(--color-muted)'};`}
+                >
+                  [{tag}]
+                </span>
+              ))}
+            </div>
+            <h2 class="font-mono text-sm font-semibold group-hover:underline" style="color: var(--color-text);">
+              {post.data.title}
+            </h2>
+            <p class="text-sm leading-relaxed" style="color: var(--color-muted);">{post.data.description}</p>
+          </div>
+          <span class="font-mono text-xs shrink-0 pt-0.5" style="color: var(--color-muted);">
+            {post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <div id="no-posts" class="hidden font-mono text-sm py-8" style="color: var(--color-muted);">
+      > no posts found for this tag
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+  const posts = document.querySelectorAll<HTMLElement>('.post-item');
+  const noPostsEl = document.getElementById('no-posts')!;
+
+  function setActive(tag: string) {
+    buttons.forEach((btn) => {
+      const isActive = btn.dataset.tag === tag;
+      if (isActive) {
+        btn.style.borderColor = 'var(--color-accent)';
+        btn.style.color = 'var(--color-accent)';
+        btn.style.background = 'var(--color-accent-dim)';
+      } else {
+        btn.style.borderColor = 'var(--color-border)';
+        btn.style.color = 'var(--color-muted)';
+        btn.style.background = 'transparent';
+      }
+    });
+
+    let visible = 0;
+    posts.forEach((post) => {
+      const postTags = post.dataset.tags?.split(',') ?? [];
+      const show = tag === 'all' || postTags.includes(tag);
+      post.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    noPostsEl.classList.toggle('hidden', visible > 0);
+  }
+
+  // Set 'all' active by default
+  setActive('all');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => setActive(btn.dataset.tag ?? 'all'));
+  });
+</script>
