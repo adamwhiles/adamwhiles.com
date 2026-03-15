@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    name: "Hello Hacker",
+    description: "A hacking-themed puzzle game on Steam. Take on the role of a hacker navigating terminals, cracking systems, and uncovering secrets. Built from scratch as a solo project.",
+    tags: ["gamedev", "steam", "rust"],
+    url: "https://store.steampowered.com/app/4119130/HELLO_HACKER/",
+    label: "View on Steam",
+    status: "released",
+  },
+  {
+    name: "Hello Hacker: Project Nightfall",
+    description: "The next chapter in the Hello Hacker universe. New challenges and an all new full desktop environment experience. Taking everything learned from the first game and building something more ambitious.",
+    tags: ["gamedev", "rust"],
+    url: "https://store.steampowered.com/app/4380090/HELLO_HACKER__Project_Daybreak/",
+    label: "In Development",
+    status: "in dev",
+  },
+  {
+    name: "certranker",
+    description: "A tool for cloud professionals to explore and compare certifications by value, difficulty, cost, and career relevance. Built to answer the question: which cert should I do next?",
+    tags: ["cloud"],
+    url: "https://certranker.com",
+    label: "Visit certranker",
+    status: "live",
+  },
+  {
+    name: "credibledev",
+    description: "A YouTube channel covering linux, home labs, cloud architecture, and DevOps. Honest content for engineers who want to level up.",
+    tags: ["cloud", "youtube"],
+    url: "https://www.youtube.com/@credibledev",
+    label: "Watch on YouTube",
+    status: "active",
+  },
+];
+
+const statusColors: Record<string, string> = {
+  released: "color: #22c55e",
+  live: "color: #22c55e",
+  active: "color: #22c55e",
+  "in dev": "color: #f97316",
+};
+---
+
+<BaseLayout title="Projects — Adam Whiles" description="Games, tools, and content I've built.">
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-24">
+    <div class="mb-12">
+      <p class="font-mono text-sm mb-3" style="color: var(--color-accent);">> ls ./projects</p>
+      <h1 class="font-mono text-3xl font-semibold mb-3" style="color: var(--color-text);">projects</h1>
+      <p class="text-sm" style="color: var(--color-muted);">Games, tools, and content I've built.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-5">
+      {projects.map((project) => (
+        <article
+          class="rounded-lg border p-6 flex flex-col gap-4"
+          style="background: var(--color-surface); border-color: var(--color-border);"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="font-mono text-sm font-semibold mb-1" style="color: var(--color-text);">{project.name}</h2>
+              <span class="font-mono text-xs" style={statusColors[project.status] ?? "color: var(--color-muted);"}>
+                ● {project.status}
+              </span>
+            </div>
+          </div>
+
+          <p class="text-sm leading-relaxed flex-1" style="color: var(--color-muted);">{project.description}</p>
+
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <div class="flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span class="font-mono text-xs px-2 py-0.5 rounded" style="background: var(--color-surface-raised); color: var(--color-muted);">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            {project.url ? (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener"
+                class="font-mono text-xs shrink-0 hover:opacity-80 transition-opacity"
+                style="color: var(--color-accent);"
+              >
+                {project.label} →
+              </a>
+            ) : (
+              <span class="font-mono text-xs shrink-0" style="color: var(--color-muted);">{project.label}</span>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

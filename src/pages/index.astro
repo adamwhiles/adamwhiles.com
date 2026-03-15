@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const projects = [
+  {
+    name: "Hello Hacker",
+    description: "A hacking-themed puzzle game. Take on the role of a hacker navigating terminals, cracking systems, and uncovering secrets.",
+    tags: ["gamedev", "steam"],
+    url: "https://store.steampowered.com/app/4119130/HELLO_HACKER/",
+    label: "Steam",
+  },
+  {
+    name: "Hello Hacker: Project Nightfall",
+    description: "The next chapter in the Hello Hacker universe. Currently in development. Featuring all new challenged and a full immersive desktop experience.",
+    tags: ["gamedev", "in dev"],
+    url: "https://store.steampowered.com/app/4380090/HELLO_HACKER__Project_Daybreak/",
+    label: "In Development",
+  },
+  {
+    name: "certranker",
+    description: "A tool for cloud professionals to explore and rank certifications by value, difficulty, and relevance.",
+    tags: ["cloud", "tool"],
+    url: "https://certranker.com",
+    label: "Visit",
+  },
+  {
+    name: "credibledev",
+    description: "A YouTube channel covering Linux, home labs, cloud architecture, and DevOps.",
+    tags: ["cloud", "youtube"],
+    url: "https://www.youtube.com/@credibledev",
+    label: "YouTube",
+  },
+];
+
+const tagColors: Record<string, string> = {
+  rust: "color: #f97316",
+  cloud: "color: #3b82f6",
+  gamedev: "color: #a855f7",
+  general: "color: var(--color-muted)",
+};
+---
+
+<BaseLayout title="Adam Whiles — Cloud Architect & Builder">
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-6 pt-20 pb-16">
+    <p class="font-mono text-sm mb-4" style="color: var(--color-accent);">> whoami</p>
+    <h1 class="font-mono text-4xl sm:text-5xl font-semibold leading-tight mb-4 cursor-blink" style="color: var(--color-text);">
+      adam whiles
+    </h1>
+    <p class="font-mono text-lg sm:text-xl mb-6" style="color: var(--color-muted);">
+      cloud architect. game dev. builder.
+    </p>
+    <p class="text-base max-w-xl leading-relaxed mb-8" style="color: var(--color-muted);">
+      I design cloud infrastructure by day and ship games and tools by night.
+      Currently working through Rust and building the next Hello Hacker.
+    </p>
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="/projects"
+        class="font-mono text-sm px-4 py-2 rounded border transition-all duration-150"
+        style="border-color: var(--color-accent); color: var(--color-accent); background: var(--color-accent-dim);"
+      >
+        view projects
+      </a>
+      <a
+        href="/blog"
+        class="font-mono text-sm px-4 py-2 rounded border transition-all duration-150"
+        style="border-color: var(--color-border); color: var(--color-muted);"
+      >
+        read blog
+      </a>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="max-w-5xl mx-auto px-6 pb-20">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="font-mono text-xs" style="color: var(--color-accent);">##</span>
+      <h2 class="font-mono text-lg font-semibold" style="color: var(--color-text);">projects</h2>
+      <div class="flex-1 h-px" style="background: var(--color-border);"></div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      {projects.map((project) => (
+        <article
+          class="rounded-lg border p-5 flex flex-col gap-3 transition-colors duration-150 group"
+          style="background: var(--color-surface); border-color: var(--color-border);"
+        >
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-mono text-sm font-semibold" style="color: var(--color-text);">{project.name}</h3>
+            {project.url ? (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener"
+                class="font-mono text-xs px-2 py-0.5 rounded border shrink-0 hover:opacity-80 transition-opacity"
+                style="border-color: var(--color-accent); color: var(--color-accent);"
+              >
+                {project.label} →
+              </a>
+            ) : (
+              <span
+                class="font-mono text-xs px-2 py-0.5 rounded border shrink-0"
+                style="border-color: var(--color-border); color: var(--color-muted);"
+              >
+                {project.label}
+              </span>
+            )}
+          </div>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">{project.description}</p>
+          <div class="flex flex-wrap gap-2 mt-auto pt-1">
+            {project.tags.map((tag) => (
+              <span class="font-mono text-xs px-2 py-0.5 rounded" style="background: var(--color-surface-raised); color: var(--color-muted);">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Latest Posts -->
+  <section class="max-w-5xl mx-auto px-6 pb-24">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="font-mono text-xs" style="color: var(--color-accent);">##</span>
+      <h2 class="font-mono text-lg font-semibold" style="color: var(--color-text);">latest posts</h2>
+      <div class="flex-1 h-px" style="background: var(--color-border);"></div>
+      <a href="/blog" class="font-mono text-xs hover:opacity-80" style="color: var(--color-accent);">all posts →</a>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      {posts.map((post) => (
+        <a
+          href={`/blog/${post.id}`}
+          class="group flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border p-4 transition-colors duration-150 hover:border-current"
+          style="background: var(--color-surface); border-color: var(--color-border);"
+        >
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="font-mono text-xs" style={tagColors[post.data.tags[0]] ?? "color: var(--color-muted);"}>
+              [{post.data.tags[0]}]
+            </span>
+          </div>
+          <span class="font-mono text-sm font-medium group-hover:underline" style="color: var(--color-text);">
+            {post.data.title}
+          </span>
+          <span class="sm:ml-auto font-mono text-xs shrink-0" style="color: var(--color-muted);">
+            {post.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
